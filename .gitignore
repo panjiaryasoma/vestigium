@@ -41,7 +41,10 @@ Thumbs.db
 .idea/
 
 # Large/private data and generated results
-data/
+data/raw/
+data/interim/
+data/processed/
+data/external/
 raw_data/
 processed_data/
 datasets/
