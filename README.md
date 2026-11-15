@@ -14,7 +14,7 @@ VESTIGIUM explores historical NASA FIRMS thermal anomalies on an Indonesia map, 
 
 ## Repository layout
 
-\`\`\`text
+```text
 vestigium/
 ├── data/                   # README tracked; raw and processed data ignored by Git
 ├── docs/
@@ -31,33 +31,32 @@ vestigium/
 ├── scripts/                # One-command local orchestrator and instructions
 ├── tests/                  # Unit and synthetic end-to-end pipeline checks
 ├── .github/workflows/      # CI validation
-├── requirements.txt
+├── pyproject.toml
+├── uv.lock
+├── .python-version
 └── README.md
-\`\`\`
+```
 
 ## Rebuild the pipeline locally
 
-Use Python **3.11+** and the official NASA FIRMS CSV ZIP for Indonesia.
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/). Python **3.11** is pinned in `.python-version`; dependencies are resolved in `uv.lock`. Use the official NASA FIRMS CSV ZIP for Indonesia.
 
-\`\`\`bash
-python -m venv .venv
-# Linux/macOS: source .venv/bin/activate
-# Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python -m unittest discover -s tests -v
+```bash
+uv sync --locked
+uv run python -m unittest discover -s tests -v
 
 # Place your source archive at data/raw/data.zip
-python scripts/run_all.py --input data/raw/data.zip
-\`\`\`
+uv run python scripts/run_all.py --input data/raw/data.zip
+```
 
 The runner rebuilds:
 
-1. **Data Engineering:** \`data/processed/data-engineering/vestigium_hotspots.sqlite\`, plus UTC sensor-wise day, month, year and 0.25° grid summaries.
-2. **Advanced Geospatial:** \`data/processed/geospatial/monthly_equal_area_25km.csv\` and 1°, 0.5°, 0.25°, 0.1° grid layers.
-3. **MODIS–VIIRS Calibration:** \`data/processed/harmonization/calibrated_modis_25km_monthly.csv\`, monthly/annual calendars, model test metrics, diagnostics, and figures.
+1. **Data Engineering:** `data/processed/data-engineering/vestigium_hotspots.sqlite`, plus UTC sensor-wise day, month, year and 0.25° grid summaries.
+2. **Advanced Geospatial:** `data/processed/geospatial/monthly_equal_area_25km.csv` and 1°, 0.5°, 0.25°, 0.1° grid layers.
+3. **MODIS–VIIRS Calibration:** `data/processed/harmonization/calibrated_modis_25km_monthly.csv`, monthly/annual calendars, model test metrics, diagnostics, and figures.
 4. **Validation:** conservation checks across all output levels.
 
-**Important provenance note:** The command-line source scripts were reconstructed from earlier notebook and data-contract specifications, because the original large \`nasa.zip\` archive was inaccessible to automatic extraction during repository migration. They were validated in GitHub Actions using *synthetic data*, not rerun on all ~6 million Indonesian source records as part of this migration. The original historical EDA, QA, and harmonization report values reflect earlier runs; new outputs must be checked for numerical agreement before claims of exact reproduction. See [reproducibility details](scripts/README.md).
+**Important provenance note:** The command-line source scripts were reconstructed from earlier notebook and data-contract specifications, because the original large `nasa.zip` archive was inaccessible to automatic extraction during repository migration. They were validated in GitHub Actions using *synthetic data*, not rerun on all ~6 million Indonesian source records as part of this migration. The original historical EDA, QA, and harmonization report values reflect earlier runs; new outputs must be checked for numerical agreement before claims of exact reproduction. See [reproducibility details](scripts/README.md).
 
 Large raw data, raster files, intermediate databases, and trained model artifacts are deliberately excluded from GitHub. Documentation and notebooks are tracked instead.
 
