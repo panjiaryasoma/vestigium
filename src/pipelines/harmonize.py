@@ -106,7 +106,8 @@ def metric(frame, prediction):
         "rmse":float(np.sqrt(mean_squared_error(actual,pred))),
         "wape":float(np.abs(actual-pred).sum()/max(1,actual.sum())),
         "volume_bias_pct":float(100*(pred.sum()-actual.sum())/max(1,actual.sum())),
-        "spearman_rho":float(pd.Series(actual).corr(pd.Series(pred),method="spearman")),
+        "spearman_rho":(lambda rho: float(rho) if pd.notna(rho) else None)(
+            pd.Series(actual).corr(pd.Series(pred),method="spearman")),
     }
 
 def all_predictions(frame,global_ratio,seasonal_ratios,model):
@@ -247,7 +248,7 @@ def run(input_csv: Path, output: Path):
            "Sensor sensitivity and regional/temporal bias remain",
            "Model uncertainty intervals not calibrated"]
     }
-    (output/"evaluation.json").write_text(json.dumps(evidence,indent=2,default=str),encoding="utf8")
+    (output/"evaluation.json").write_text(json.dumps(evidence,indent=2,default=str,allow_nan=False),encoding="utf8")
     try:
         import joblib
         joblib.dump(model,output/"poisson_model.joblib")
