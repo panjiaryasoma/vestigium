@@ -1,0 +1,10 @@
+__pycache__/
+.pytest_cache/
+.env
+*.sqlite
+*.sqlite3
+*.db
+*.csv
+*.tif
+*.tiff
+*.parquet

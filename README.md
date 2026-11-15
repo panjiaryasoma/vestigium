@@ -16,6 +16,7 @@ VESTIGIUM explores historical NASA FIRMS thermal anomalies on an Indonesia map, 
 
 ```text
 vestigium/
+├── app/                    # React atlas in web/ + FastAPI service in api/
 ├── data/                   # README tracked; raw and processed data ignored by Git
 ├── docs/
 │   ├── eda/                # Full English exploratory report
@@ -60,6 +61,26 @@ The runner rebuilds:
 
 Large raw data, raster files, intermediate databases, and trained model artifacts are deliberately excluded from GitHub. Documentation and notebooks are tracked instead.
 
+## Web atlas and API
+
+The interactive VESTIGIUM application is under `app/web` (React / Vite / MapLibre) and `app/api` (FastAPI). All source files are committed; raw NASA data and large SQLite/ML artifacts are intentionally excluded.
+
+Start from the repository root in separate terminals:
+
+```bash
+cd app/api
+python -m pip install -r requirements.txt
+python -m uvicorn main:app --reload --port 8000
+```
+
+```bash
+cd app/web
+npm install
+npm run dev
+```
+
+The frontend runs at http://localhost:5173 and proxies /api to localhost:8000. The backend automatically reads existing artifacts in `data/processed/` when present; otherwise it serves **clearly labelled synthetic demo detections**. The historical calibration calendar stays unavailable without real pipeline outputs. See [API setup](app/api/README.md) and [Web setup](app/web/README.md). The application is an exploratory historical atlas, **not** a live wildfire warning system.
+
 ## Research
 
 - [Documentation index](docs/README.md)
@@ -90,7 +111,7 @@ Read the **[Model Card with five evidence visuals](docs/harmonization/model/MODE
 
 ## Next deliverables
 
-- Production-ready backend and frontend integration for map viewport queries and timeline interaction.
+- Connect and verify full production pipeline artifacts, hosted API/frontend, and reproducible frontend builds.
 - Independent observation-effort data (satellite overpasses, cloud cover) to strengthen calibration.
 - Verified polygon boundaries for administrative mapping and independent data for burned-area/land-cover history.
 
