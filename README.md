@@ -71,6 +71,24 @@ Large raw data, raster files, intermediate databases, and trained model artifact
 - [Geospatial QA](docs/geospatial/GEOSPATIAL_QA_REPORT.md)
 - [Harmonization evaluation](docs/harmonization/HARMONIZATION_REPORT.md)
 
+
+## Model evidence and visual results
+
+The archived full-dataset experiment estimated **VIIRS S-NPP-equivalent thermal pixel detection counts from MODIS** on monthly 25-km equal-area grid cells (not unique wildfires).
+
+| Held-out 2023–2025 method | MAE ↓ | RMSE ↓ |
+| --- | ---: | ---: |
+| Raw MODIS | 15.67 | 43.59 |
+| Global scaling | 11.56 | **21.87** |
+| Seasonal scaling | 11.15 | 22.30 |
+| **Poisson gradient boosting** | **10.24** | 24.68 |
+
+![Archived model comparison: MAE](docs/harmonization/figures/holdout_mae.svg)
+
+Read the **[Model Card with five evidence visuals](docs/harmonization/model/MODEL_CARD.md)** and the [machine-readable evaluation snapshot](docs/harmonization/evidence/archived_metrics_2026-11-15.json).
+
+**Evidence integrity:** These numerical scores come from the earlier archived full-dataset analysis. The current reconstructed GitHub code passed synthetic CI, but **has not been independently rerun on the complete source dataset since repository restructuring**. The model remains an experimental sensor calibration with known regional error and a MODIS detection blind spot.
+
 ## Next deliverables
 
 - Production-ready backend and frontend integration for map viewport queries and timeline interaction.
