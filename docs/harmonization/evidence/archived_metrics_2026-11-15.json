@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VESTIGIUM: archived harmonization evaluation evidence",
+  "provenance": {
+    "kind": "archived_historical_experiment_report_not_new_model_rerun",
+    "report_source": "docs/harmonization/HARMONIZATION_REPORT.md",
+    "snapshot_date": "2026-11-15",
+    "challenge": "NASA Space Apps Challenge 2026",
+    "raw_input": "NASA FIRMS MODIS + VIIRS S-NPP + NOAA-20, Indonesia 2000–2025",
+    "notes": "Numbers transcribed directly from the previously generated English harmonization research report. The reconstructed GitHub training script has NOT been independently re-executed on the entire original archive in this deployment. Do not represent these metrics as its new output."
+  },
+  "observational_unit": "satellite thermal anomaly pixel detection; not unique fire events",
+  "target": "VIIRS S-NPP-like detected-pixel count per equal-area 25 km UTC grid-month conditioned on MODIS-positive cell",
+  "sensor_observations": {
+    "total_presumed_vegetation_pixel_detections": 5997676,
+    "grid_month_rows_all_sensors": 473862,
+    "modis_positive_grid_months": 185083
+  },
+  "split": {
+    "train": "2013–2021",
+    "train_n": 64436,
+    "validation": "2022",
+    "validation_n": 3696,
+    "test": "2023–2025",
+    "test_n": 17291,
+    "selection_metric": "2022 validation RMSE",
+    "preferred_candidate": "ml_poisson_hgbr"
+  },
+  "metrics": {
+    "validation_2022": [
+      {
+        "method": "raw_modis",
+        "mae": 6.42,
+        "rmse": 20.02,
+        "wape_pct": 83.29,
+        "bias_pct": -68.8,
+        "spearman_rho": 0.426
+      },
+      {
+        "method": "global_ratio",
+        "mae": 7.77,
+        "rmse": 17.15,
+        "wape_pct": 100.71,
+        "bias_pct": 44.4,
+        "spearman_rho": 0.426
+      },
+      {
+        "method": "seasonal_ratio",
+        "mae": 7.08,
+        "rmse": 17.03,
+        "wape_pct": 91.81,
+        "bias_pct": 30.9,
+        "spearman_rho": 0.439
+      },
+      {
+        "method": "ml_poisson_hgbr",
+        "mae": 6.59,
+        "rmse": 15.82,
+        "wape_pct": 85.46,
+        "bias_pct": 34.9,
+        "spearman_rho": 0.532
+      }
+    ],
+    "temporal_holdout_2023_2025": [
+      {
+        "method": "raw_modis",
+        "mae": 15.67,
+        "rmse": 43.59,
+        "wape_pct": 79.67,
+        "bias_pct": -75.8,
+        "spearman_rho": 0.634
+      },
+      {
+        "method": "global_ratio",
+        "mae": 11.56,
+        "rmse": 21.87,
+        "wape_pct": 58.76,
+        "bias_pct": 12.1,
+        "spearman_rho": 0.634
+      },
+      {
+        "method": "seasonal_ratio",
+        "mae": 11.15,
+        "rmse": 22.3,
+        "wape_pct": 56.69,
+        "bias_pct": 11.9,
+        "spearman_rho": 0.661
+      },
+      {
+        "method": "ml_poisson_hgbr",
+        "mae": 10.24,
+        "rmse": 24.68,
+        "wape_pct": 52.09,
+        "bias_pct": 11.3,
+        "spearman_rho": 0.73
+      }
+    ],
+    "observed_test_reference_count_modis_positive_grid_months": 340004,
+    "selected_model_estimated_count_same_scope": 378269,
+    "regional_holdout": [
+      {
+        "region": "Central 110–125°E",
+        "observed": 210300,
+        "predicted": 219046,
+        "bias_pct": 4.2
+      },
+      {
+        "region": "East ≥125°E",
+        "observed": 37767,
+        "predicted": 42318,
+        "bias_pct": 12
+      },
+      {
+        "region": "West <110°E",
+        "observed": 91937,
+        "predicted": 116905,
+        "bias_pct": 27.2
+      }
+    ],
+    "overlap_coverage": {
+      "snpp_pixels_with_modis_positive_grid_month_share_2013_2025_pct": 89.6,
+      "snpp_pixels_without_modis_positive_grid_month_share_2013_2025_pct": 10.4,
+      "snpp_pixels_with_modis_positive_grid_month_share_2022_pct": 60.2
+    }
+  },
+  "limitations": [
+    "No independent cloud-free observation opportunity / overpass denominator",
+    "Spatial cell-month match is not exact satellite overpass or unique fire matching",
+    "Model cannot reconstruct unseen VIIRS-only detections from MODIS-positive-only calibration",
+    "Nonstationary historical sensor coverage and satellite sensitivity",
+    "No calibrated predictive uncertainty interval",
+    "Experimental model not independently validated against unique fire events or burned area"
+  ]
+}
