@@ -1,0 +1,11 @@
+# Reproducible local pipeline environment (Python 3.11+)
+numpy>=1.26,<3
+pandas>=2.2,<3
+matplotlib>=3.8,<4
+scikit-learn>=1.5,<2
+pyproj>=3.6,<4
+jupyterlab>=4.2,<5
+ipython>=8.20,<10
+joblib>=1.3,<2
+# Only needed for the original archived advanced-geospatial notebook:
+geopandas>=1.0,<2
