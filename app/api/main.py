@@ -35,7 +35,9 @@ DB = source_path("VESTIGIUM_DB", "data/processed/data-engineering/vestigium_hots
 MONTHLY = source_path("VESTIGIUM_MONTHLY_CSV", "data/processed/data-engineering/monthly_sensor.csv")
 CALENDAR = source_path("VESTIGIUM_CALENDAR_CSV", "data/processed/harmonization/harmonized_calendar_monthly.csv")
 QUALITY = source_path("VESTIGIUM_QUALITY_JSON", "data/processed/data-engineering/quality_report.json")
-MODE = "live" if DB.is_file() else "demo"
+WEB_DATA = BASE / "data"
+WEB_INDEX = WEB_DATA / "monthly_index.json"
+MODE = "live" if DB.is_file() else ("archive" if WEB_INDEX.is_file() else ("unavailable" if os.getenv("VERCEL") else "demo"))
 YEARS = list(range(2000, 2026))
 SENSORS = ["MODIS", "VIIRS_SNPP", "VIIRS_NOAA20"]
 REGIONS: dict[str, tuple[float, float, float, float]] = {
@@ -95,6 +97,21 @@ def to_feature(record: dict) -> dict:
     }
 
 
+@lru_cache(maxsize=1)
+def archive_index():
+    return json.loads(WEB_INDEX.read_text(encoding="utf-8")) if WEB_INDEX.is_file() else {"months": []}
+
+
+@lru_cache(maxsize=3)
+def archive_year(year: int):
+    file = WEB_DATA / "samples" / (str(year) + ".json")
+    return json.loads(file.read_text(encoding="utf-8")) if file.is_file() else {}
+
+
+def archive_month(year: int, month: int):
+    return archive_year(year).get(str(month), [])
+
+
 @lru_cache(maxsize=400)
 def demo_points(year: int, month: int) -> tuple[dict, ...]:
     if year == 2000 and month < 11:
@@ -129,6 +146,10 @@ def demo_points(year: int, month: int) -> tuple[dict, ...]:
 
 @lru_cache(maxsize=1)
 def monthly_rows() -> tuple[dict, ...]:
+    if MODE == "archive":
+        return tuple(archive_index().get("months", []))
+    if MODE == "unavailable":
+        return tuple()
     if MODE == "live":
         if MONTHLY.is_file():
             with MONTHLY.open(newline="", encoding="utf-8-sig") as f:
@@ -170,7 +191,7 @@ def calendar_rows() -> tuple[dict, ...]:
 
 @app.get("/api/health")
 def health():
-    return {"status": "ok", "mode": MODE, "database_available": DB.is_file(), "calendar_available": MODE == "live" and CALENDAR.is_file()}
+    return {"status": "ok", "mode": MODE, "database_available": DB.is_file(), "archive_available": MODE == "archive", "calendar_available": MODE == "live" and CALENDAR.is_file()}
 
 
 @app.get("/api/v1/meta")
@@ -180,7 +201,11 @@ def meta():
         "sensors": SENSORS, "regions": list(REGIONS),
         "has_harmonization_calendar": MODE == "live" and CALENDAR.is_file(),
         "message": ("SYNTHETIC DEMONSTRATION. Coordinates, dates, and quantities are generated examples, NOT NASA observations."
-                    if MODE == "demo" else "NASA FIRMS dataset configured; individual records are thermal pixel detections, not separate fires."),
+                    if MODE == "demo" else
+                    "Genuine NASA FIRMS coordinates, reproducibly sampled for map display; monthly totals use all accepted source records."
+                    if MODE == "archive" else
+                    "DATA UNAVAILABLE. No synthetic markers displayed." if MODE == "unavailable" else
+                    "NASA FIRMS dataset configured; individual records are thermal pixel detections, not separate fires."),
         "time_zone": "UTC", "observation_unit": "satellite_thermal_pixel_detection_not_unique_fire_event",
         "viewport_note": "Regions are geographic bounding areas, not province polygons."
     }
@@ -202,6 +227,14 @@ def hotspots(
                    and (sensor == "ALL" or p["sensor"] == sensor)]
         total = len(records)
         records = records[:limit]
+    elif MODE == "archive":
+        records = [p for p in archive_month(year, month)
+                   if a <= p["longitude"] <= c and b <= p["latitude"] <= d
+                   and (sensor == "ALL" or p["sensor"] == sensor)]
+        total = len(records)
+        records = records[:limit]
+    elif MODE == "unavailable":
+        total, records = 0, []
     else:
         clauses = ["year=?", "month=?", "longitude>=?", "longitude<=?", "latitude>=?", "latitude<=?"]
         params: list = [year, month, a, c, b, d]
@@ -220,8 +253,9 @@ def hotspots(
             r["synthetic"] = False
     return {"type": "FeatureCollection", "features": [to_feature(r) for r in records],
             "meta": {"returned": len(records), "limit": limit, "truncated": total > limit,
-                     "synthetic": MODE == "demo", "sampled": False,
-                     "note": "Viewport-limited detections. Counts are not exhaustive when truncated."}}
+                     "synthetic": MODE == "demo", "sampled": MODE == "archive",
+                     "note": ("Actual NASA FIRMS detections, bounded random sample, not an exhaustive map."
+                              if MODE == "archive" else "Viewport-limited detections. Counts are not exhaustive when truncated.")}}
 
 
 @app.get("/api/v1/temporal")
@@ -298,6 +332,8 @@ def evaluation():
 
 @app.get("/api/v1/data-quality")
 def data_quality():
+    if MODE == "archive" and (WEB_DATA / "quality_report.json").is_file():
+        return {"available": True, "report": json.loads((WEB_DATA / "quality_report.json").read_text(encoding="utf-8")), "synthetic": False}
     if MODE == "live" and QUALITY.is_file():
         try:
             return {"available": True, "report": json.loads(QUALITY.read_text(encoding="utf-8")), "synthetic": False}

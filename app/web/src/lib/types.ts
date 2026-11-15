@@ -2,7 +2,7 @@ export type Sensor = 'ALL' | 'MODIS' | 'VIIRS_SNPP' | 'VIIRS_NOAA20'
 
 export interface Meta {
   product: string
-  mode: 'demo' | 'live'
+  mode: 'demo' | 'live' | 'archive' | 'unavailable'
   synthetic: boolean
   years: number[]
   sensors: string[]

@@ -72,7 +72,7 @@ export default function Explore({ meta }: { meta: Meta | null }) {
         </div>
         <div className="atlas-timeline"><div className="timeline-title"><div><span>02 / TEMPORAL RECORD</span><h3>ACTIVITY TIMELINE <small>RAW DETECTIONS</small></h3></div><div className="timeline-metrics"><span>YEAR TOTAL <b>{numberFormat(annualCount)}</b></span><span>SELECTED MONTH <b>{numberFormat(monthCount)}</b></span></div></div>
           <TimelineBars rows={temporal?.data || []} selected={month} onSelect={setMonth}/>
-          <div className="timeline-caption">Monthly pixel detections, all Indonesian regions. Bars are not counts of separate fires.</div>
+          <div className="timeline-caption">Monthly totals cover the full dataset. Map markers are a bounded sample in archive mode; neither is a count of unique fires.</div>
         </div>
       </div>
       <aside className="evidence-panel">

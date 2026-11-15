@@ -8,7 +8,10 @@ export function Eyebrow({ index, children }: { index?: string; children: ReactNo
 export function DataNotice({ meta, concise = false }: { meta: Meta | null; concise?: boolean }) {
   if (!meta) return <div className="data-notice"><AlertTriangle size={14}/> API unavailable. Start the FastAPI server to view data.</div>
   return <div className={`data-notice ${meta.synthetic ? 'notice-synthetic' : 'notice-live'}`}><AlertTriangle size={14}/>
-    {meta.synthetic ? (concise ? 'SYNTHETIC DEMO DATA · NOT NASA OBSERVATIONS' : meta.message) : 'NASA FIRMS PIXEL DETECTIONS · NOT DISTINCT FIRE EVENTS'}
+    {meta.synthetic ? (concise ? 'SYNTHETIC DEMO DATA · NOT NASA OBSERVATIONS' : meta.message)
+    : meta.mode === 'archive' ? (concise ? 'NASA FIRMS · GENUINE COORDINATES · SAMPLED MAP' : meta.message)
+    : meta.mode === 'unavailable' ? 'DATA UNAVAILABLE · NO POINTS DISPLAYED'
+    : 'NASA FIRMS PIXEL DETECTIONS · NOT DISTINCT FIRE EVENTS'}
   </div>
 }
 export function PageTitle({ index, label, title, description }: { index: string; label: string; title: ReactNode; description: string }) {
