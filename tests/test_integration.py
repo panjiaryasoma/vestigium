@@ -66,6 +66,15 @@ class IntegrationTests(unittest.TestCase):
             self.assertTrue((harm/"harmonized_calendar_monthly.csv").exists())
             self.assertTrue((harm/"harmonized_calendar_annual.csv").exists())
             self.assertTrue((harm/"evaluation.json").exists())
+            self.assertTrue((harm/"poisson_model.joblib").exists())
+            json.loads((harm/"evaluation.json").read_text(encoding="utf8"),
+                       parse_constant=lambda token: (_ for _ in ()).throw(
+                           ValueError(f"Non-standard JSON constant: {token}")))
+            for name in ("03_temporal_holdout_2023_2025.png",
+                         "04_regional_bias.png",
+                         "05_modis_blind_spot_diagnostic.png",
+                         "06_harmonized_monthly_heatmap.png"):
+                self.assertTrue((harm/"figures"/name).exists(), name)
             self.assertEqual(validate(root)["source_pixels"], 26)
 
 if __name__=="__main__":
