@@ -64,7 +64,7 @@ class EvidenceTests(unittest.TestCase):
             100,places=5)
 
     def test_svg_figures_are_valid(self):
-        expected=["holdout_mae.svg","holdout_rmse.svg","regional_bias.svg",
+        expected=["holdout_mae.svg","holdout_rmse.svg","validation_rmse.svg","regional_bias.svg",
                   "viirs_detection_gap.svg","test_volume.svg"]
         for name in expected:
             with self.subTest(name=name):
