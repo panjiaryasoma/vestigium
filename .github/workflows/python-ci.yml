@@ -6,14 +6,24 @@ on:
     paths:
       - "src/**"
       - "tests/**"
-      - "requirements.txt"
+      - "notebooks/**"
+      - "pyproject.toml"
+      - ".python-version"
+      - "uv.lock"
       - ".github/workflows/python-ci.yml"
   pull_request:
     paths:
       - "src/**"
       - "tests/**"
-      - "requirements.txt"
+      - "notebooks/**"
+      - "pyproject.toml"
+      - ".python-version"
+      - "uv.lock"
+      - ".github/workflows/python-ci.yml"
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   unit-tests:
@@ -21,24 +31,28 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Install uv and Python 3.11
+        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
         with:
+          enable-cache: true
           python-version: "3.11"
-          cache: pip
-      - name: Install dependencies
-        run: python -m pip install -r requirements.txt
-      - name: Compile all Python scripts
-        run: python -m compileall -q src tests
-      - name: Run unit tests
-        run: python -m unittest discover -s tests -v
+      - name: Verify dependency lock
+        run: uv lock --check
+      - name: Install locked dependencies
+        run: uv sync --locked
+      - name: Compile Python source and tests
+        run: uv run --locked python -m compileall -q src tests
+      - name: Run unit and integration tests
+        run: uv run --locked python -m unittest discover -s tests -v
       - name: Check notebook JSON format
         run: |
-          python - <<'PY'
-          import json, pathlib
-          files=list(pathlib.Path("notebooks").rglob("*.ipynb"))
+          uv run --locked python - <<'PY'
+          import json
+          import pathlib
+          files = list(pathlib.Path("notebooks").rglob("*.ipynb"))
           assert files, "No notebooks found"
-          for p in files:
-              nb=json.loads(p.read_text(encoding="utf8"))
-              assert nb["nbformat"] == 4 and isinstance(nb["cells"], list), p
-              print(p, len(nb["cells"]), "cells")
+          for path in files:
+              notebook = json.loads(path.read_text(encoding="utf-8"))
+              assert notebook["nbformat"] == 4 and isinstance(notebook["cells"], list), path
+              print(path, len(notebook["cells"]), "cells")
           PY
