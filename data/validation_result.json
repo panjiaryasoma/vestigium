@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "rows": 5997676,
+  "by_sensor": {
+    "MODIS": 1443591,
+    "VIIRS_NOAA20": 1203124,
+    "VIIRS_SNPP": 3350961
+  },
+  "aggregate_checks": {
+    "daily_sensor": 5997676,
+    "monthly_sensor": 5997676,
+    "annual_sensor": 5997676,
+    "monthly_grid": 5997676,
+    "annual_grid": 5997676
+  }
+}
