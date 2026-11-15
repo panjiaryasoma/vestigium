@@ -45,11 +45,11 @@ The boosting model was selected because validation RMSE was lowest among calibra
 
 ### Figure 1. Test MAE
 
-![Archived 2023–2025 MAE by model](figures/holdout_mae.svg)
+![Archived 2023–2025 MAE by model](../figures/holdout_mae.svg)
 
 ### Figure 2. Test RMSE
 
-![Archived 2023–2025 RMSE by model](figures/holdout_rmse.svg)
+![Archived 2023–2025 RMSE by model](../figures/holdout_rmse.svg)
 
 **Interpretation:** Poisson boosting reduced holdout MAE by **8.2% versus seasonal scaling** but its RMSE was **12.8% worse than global scaling**. It helps average absolute error and rank order, but is **not uniformly superior**, particularly for large-error tail observations.
 
@@ -57,7 +57,7 @@ The boosting model was selected because validation RMSE was lowest among calibra
 
 S-NPP reference within MODIS-positive holdout cells: **340,004** detected pixel records. Boosting model estimate: **378,269** fractional expected count units, around **+11.3% aggregate overestimation**.
 
-![Archived holdout observed and estimated detection volume](figures/test_volume.svg)
+![Archived holdout observed and estimated detection volume](../figures/test_volume.svg)
 
 ## Geographical errors
 
@@ -67,7 +67,7 @@ S-NPP reference within MODIS-positive holdout cells: **340,004** detected pixel 
 | East ≥125°E | 37,767 | 42,318 | +12.0% |
 | West <110°E | 91,937 | 116,905 | **+27.2%** |
 
-![Archived holdout bias across longitude bands](figures/regional_bias.svg)
+![Archived holdout bias across longitude bands](../figures/regional_bias.svg)
 
 These are broad longitude bands, not verified province polygons. The model has unequal bias across Indonesia; any downstream ranking of regional risk must retain this warning.
 
@@ -75,13 +75,13 @@ These are broad longitude bands, not verified province polygons. The model has u
 
 Across 2013–2025, only **89.6%** of S-NPP detections fall in grid-months where MODIS also detected a hotspot. **10.4%** fall outside MODIS-positive grid-months and cannot be restored by this conditional calibration. The within-MODIS proportion fell to **60.2% in 2022**.
 
-![Archived VIIRS observations absent from MODIS-positive cells](figures/viirs_detection_gap.svg)
+![Archived VIIRS observations absent from MODIS-positive cells](../figures/viirs_detection_gap.svg)
 
 A monthly co-location is **not** a same-pixel or same-overpass match. Missing MODIS detections may reflect sensitivity, cloud cover, timing, and observation opportunities. Absence of a pixel detection does not mean no fire.
 
 ## Assets and audit trail
 
-- [Machine-readable metrics snapshot](evidence/archived_metrics_2026-11-15.json).
+- [Machine-readable metrics snapshot](../evidence/archived_metrics_2026-11-15.json).
 - [Original archived English technical report](../HARMONIZATION_REPORT.md).
 - [Training and evaluation source](../../../src/pipelines/harmonize.py).
 - [Geospatial builder (25 km cells)](../../../src/pipelines/run_advanced.py).
