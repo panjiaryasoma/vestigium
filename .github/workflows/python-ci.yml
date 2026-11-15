@@ -1,0 +1,44 @@
+name: VESTIGIUM Python CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "requirements.txt"
+      - ".github/workflows/python-ci.yml"
+  pull_request:
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "requirements.txt"
+  workflow_dispatch:
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Compile all Python scripts
+        run: python -m compileall -q src tests
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Check notebook JSON format
+        run: |
+          python - <<'PY'
+          import json, pathlib
+          files=list(pathlib.Path("notebooks").rglob("*.ipynb"))
+          assert files, "No notebooks found"
+          for p in files:
+              nb=json.loads(p.read_text(encoding="utf8"))
+              assert nb["nbformat"] == 4 and isinstance(nb["cells"], list), p
+              print(p, len(nb["cells"]), "cells")
+          PY
