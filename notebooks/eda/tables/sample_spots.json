@@ -1,0 +1,290 @@
+[
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2012-01-20",
+    "latitude": -3.84394,
+    "longitude": 136.37462,
+    "frp_mw": 5.889999866485596,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2012-01-20",
+    "latitude": -8.15034,
+    "longitude": 125.08701,
+    "frp_mw": 5.179999828338623,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2012-01-20",
+    "latitude": -2.75943,
+    "longitude": 120.26327,
+    "frp_mw": 4.739999771118164,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2012-01-20",
+    "latitude": -2.8178,
+    "longitude": 120.38645,
+    "frp_mw": 2.9800000190734863,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2012-08-29",
+    "latitude": -6.69181,
+    "longitude": 108.14382,
+    "frp_mw": 1.2999999523162842,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2012-08-29",
+    "latitude": -6.69132,
+    "longitude": 108.14546,
+    "frp_mw": 0.9200000166893005,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2012-08-29",
+    "latitude": -7.40793,
+    "longitude": 112.44022,
+    "frp_mw": 0.8899999856948853,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2012-08-29",
+    "latitude": -6.5925,
+    "longitude": 108.25646,
+    "frp_mw": 0.8899999856948853,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2012-10-27",
+    "latitude": -8.06516,
+    "longitude": 114.10178,
+    "frp_mw": 1.0,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2012-10-27",
+    "latitude": -7.97499,
+    "longitude": 112.87714,
+    "frp_mw": 0.44999998807907104,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2012-10-27",
+    "latitude": -7.97561,
+    "longitude": 112.88074,
+    "frp_mw": 0.44999998807907104,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2012-10-27",
+    "latitude": -7.97702,
+    "longitude": 112.87919,
+    "frp_mw": 0.7699999809265137,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2013-01-01",
+    "latitude": -4.51818,
+    "longitude": 122.01451,
+    "frp_mw": 5.650000095367432,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2013-01-01",
+    "latitude": -4.51752,
+    "longitude": 122.01874,
+    "frp_mw": 5.389999866485596,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2013-01-01",
+    "latitude": -4.52181,
+    "longitude": 122.01508,
+    "frp_mw": 5.650000095367432,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2013-01-01",
+    "latitude": -4.52115,
+    "longitude": 122.01929,
+    "frp_mw": 5.389999866485596,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2013-08-26",
+    "latitude": 0.26806,
+    "longitude": 102.92487,
+    "frp_mw": 3.880000114440918,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2013-08-26",
+    "latitude": 0.25009,
+    "longitude": 102.80705,
+    "frp_mw": 20.1200008392334,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2013-08-26",
+    "latitude": 0.22673,
+    "longitude": 102.65408,
+    "frp_mw": 8.100000381469727,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2013-08-26",
+    "latitude": 0.20379,
+    "longitude": 102.5039,
+    "frp_mw": 19.479999542236328,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2014-01-01",
+    "latitude": -6.98596,
+    "longitude": 140.52841,
+    "frp_mw": 9.130000114440918,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2014-01-01",
+    "latitude": -6.98664,
+    "longitude": 140.52455,
+    "frp_mw": 7.860000133514404,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2014-01-01",
+    "latitude": 1.16255,
+    "longitude": 101.95162,
+    "frp_mw": 44.13999938964844,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2014-01-01",
+    "latitude": 0.17715,
+    "longitude": 117.49155,
+    "frp_mw": 1.5700000524520874,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2014-03-30",
+    "latitude": -0.28982,
+    "longitude": 102.43404,
+    "frp_mw": 0.9800000190734863,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2014-03-30",
+    "latitude": -0.28915,
+    "longitude": 102.4298,
+    "frp_mw": 0.9800000190734863,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2014-03-30",
+    "latitude": -0.29049,
+    "longitude": 102.43826,
+    "frp_mw": 1.7699999809265137,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2014-03-30",
+    "latitude": -0.28684,
+    "longitude": 102.43884,
+    "frp_mw": 1.7699999809265137,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2014-09-14",
+    "latitude": -2.61584,
+    "longitude": 106.60666,
+    "frp_mw": 5.440000057220459,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2014-09-14",
+    "latitude": -2.0478,
+    "longitude": 110.16018,
+    "frp_mw": 3.390000104904175,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2014-09-14",
+    "latitude": -2.03384,
+    "longitude": 110.24606,
+    "frp_mw": 10.59000015258789,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2014-09-14",
+    "latitude": -1.9966,
+    "longitude": 110.47486,
+    "frp_mw": 4.670000076293945,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2014-10-11",
+    "latitude": -2.96769,
+    "longitude": 110.28159,
+    "frp_mw": 6.630000114440918,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2014-10-11",
+    "latitude": -3.706,
+    "longitude": 105.54934,
+    "frp_mw": 15.859999656677246,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2014-10-11",
+    "latitude": -3.70652,
+    "longitude": 105.54588,
+    "frp_mw": 13.920000076293945,
+    "type": 0
+  },
+  {
+    "source": "VIIRS S-NPP",
+    "date_utc": "2014-10-11",
+    "latitude": -3.70915,
+    "longitude": 105.52857,
+    "frp_mw": 2.6600000858306885,
+    "type": 0
+  }
+]

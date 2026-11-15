@@ -1,0 +1,22 @@
+source,check,count
+VIIRS S-NPP,date_parse,0
+VIIRS S-NPP,file_year_mismatch,0
+VIIRS S-NPP,invalid_geo_world,0
+VIIRS S-NPP,out_of_rough_ID_bbox,0
+VIIRS S-NPP,invalid_frp,0
+VIIRS S-NPP,invalid_type,0
+VIIRS S-NPP,invalid_utc_time,0
+MODIS,date_parse,0
+MODIS,file_year_mismatch,0
+MODIS,invalid_geo_world,0
+MODIS,out_of_rough_ID_bbox,0
+MODIS,invalid_frp,0
+MODIS,invalid_type,0
+MODIS,invalid_utc_time,0
+VIIRS NOAA-20,date_parse,0
+VIIRS NOAA-20,file_year_mismatch,0
+VIIRS NOAA-20,invalid_geo_world,0
+VIIRS NOAA-20,out_of_rough_ID_bbox,0
+VIIRS NOAA-20,invalid_frp,0
+VIIRS NOAA-20,invalid_type,0
+VIIRS NOAA-20,invalid_utc_time,0

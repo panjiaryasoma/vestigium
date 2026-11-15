@@ -1,0 +1,144 @@
+{
+  "data_zip": "data.zip",
+  "total_csv_files_in_zip": 49,
+  "indonesia_csv_files": 48,
+  "excluded_files": [
+    "MODIS/modis_2003_Angola.csv"
+  ],
+  "all_indonesia_records": 6355534,
+  "records_by_source": {
+    "VIIRS S-NPP": 3514520,
+    "MODIS": 1533411,
+    "VIIRS NOAA-20": 1307603
+  },
+  "type0_total": 5997676,
+  "type_counts_overall": {
+    "0": 5997676,
+    "1": 84019,
+    "2": 247497,
+    "3": 26342
+  },
+  "schemas": {
+    "VIIRS S-NPP": [
+      "latitude",
+      "longitude",
+      "bright_ti4",
+      "scan",
+      "track",
+      "acq_date",
+      "acq_time",
+      "satellite",
+      "instrument",
+      "confidence",
+      "version",
+      "bright_ti5",
+      "frp",
+      "daynight",
+      "type"
+    ],
+    "MODIS": [
+      "latitude",
+      "longitude",
+      "brightness",
+      "scan",
+      "track",
+      "acq_date",
+      "acq_time",
+      "satellite",
+      "instrument",
+      "confidence",
+      "version",
+      "bright_t31",
+      "frp",
+      "daynight",
+      "type"
+    ],
+    "VIIRS NOAA-20": [
+      "latitude",
+      "longitude",
+      "bright_ti4",
+      "scan",
+      "track",
+      "acq_date",
+      "acq_time",
+      "satellite",
+      "instrument",
+      "confidence",
+      "version",
+      "bright_ti5",
+      "frp",
+      "daynight",
+      "type"
+    ]
+  },
+  "schema_drift": [],
+  "bounding_box_for_screening_only": {
+    "lat_min": -12,
+    "lat_max": 6.5,
+    "lon_min": 94,
+    "lon_max": 142
+  },
+  "duplicate_full_rows_within_each_file": 0,
+  "first_last_date_by_source": {
+    "VIIRS S-NPP": {
+      "first": "2012-01-20",
+      "last": "2025-12-31",
+      "days_with_at_least_one_detection_all_types": 5056
+    },
+    "MODIS": {
+      "first": "2000-11-01",
+      "last": "2025-12-31",
+      "days_with_at_least_one_detection_all_types": 9088
+    },
+    "VIIRS NOAA-20": {
+      "first": "2018-04-01",
+      "last": "2025-12-31",
+      "days_with_at_least_one_detection_all_types": 2825
+    }
+  },
+  "invalid_counts": {
+    "VIIRS S-NPP | date_parse": 0,
+    "VIIRS S-NPP | file_year_mismatch": 0,
+    "VIIRS S-NPP | invalid_geo_world": 0,
+    "VIIRS S-NPP | out_of_rough_ID_bbox": 0,
+    "VIIRS S-NPP | invalid_frp": 0,
+    "VIIRS S-NPP | invalid_type": 0,
+    "VIIRS S-NPP | invalid_utc_time": 0,
+    "MODIS | date_parse": 0,
+    "MODIS | file_year_mismatch": 0,
+    "MODIS | invalid_geo_world": 0,
+    "MODIS | out_of_rough_ID_bbox": 0,
+    "MODIS | invalid_frp": 0,
+    "MODIS | invalid_type": 0,
+    "MODIS | invalid_utc_time": 0,
+    "VIIRS NOAA-20 | date_parse": 0,
+    "VIIRS NOAA-20 | file_year_mismatch": 0,
+    "VIIRS NOAA-20 | invalid_geo_world": 0,
+    "VIIRS NOAA-20 | out_of_rough_ID_bbox": 0,
+    "VIIRS NOAA-20 | invalid_frp": 0,
+    "VIIRS NOAA-20 | invalid_type": 0,
+    "VIIRS NOAA-20 | invalid_utc_time": 0
+  },
+  "confidence_notes": {
+    "modis_type0_confidence_n_numeric": 1443591,
+    "modis_type0_confidence_quantiles": {
+      "0": 0.0,
+      "10": 35.0,
+      "25": 51.0,
+      "50": 67.0,
+      "75": 81.0,
+      "90": 93.0,
+      "100": 100.0
+    },
+    "invalid_confidence_numeric": 0
+  },
+  "cautions": [
+    "Source records are pixel-level thermal detections, not unique fires nor confirmed forest fires.",
+    "type=0 means presumed vegetation fire, not confirmed fire origin.",
+    "Sensor counts and FRP values are not intrinsically comparable across MODIS and VIIRS.",
+    "Dates and acquisition times are UTC. Empty day means no records, not proof of no fires.",
+    "Bounding-box check does not verify Indonesia land polygons or province membership.",
+    "Dataset does not label deliberate ignition or natural ignition, no arson model labels.",
+    "Exact full-row hashes within-file checked, no cross-sensor event deduplication attempted."
+  ]
+}

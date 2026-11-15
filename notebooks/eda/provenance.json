@@ -1,0 +1,24 @@
+{
+  "input_file": "data.zip",
+  "input_bytes": 121302286,
+  "input_sha256": "8af7ff723b8d5c0916b382b1a2f9088b9028b75fecc1c2cfb927831c1127bcba",
+  "source": "User-uploaded NASA FIRMS CSV archive",
+  "record_scope": "Indonesia 48 CSV; excludes MODIS/modis_2003_Angola.csv",
+  "eda_date": "2026-11-14",
+  "original_eda_code_files": [
+    "vestigium_eda.py",
+    "render_eda.py",
+    "make_report.py",
+    "build_notebook.py",
+    "validate_outputs.py"
+  ],
+  "english_edition_files": [
+    "VESTIGIUM_EDA_COMPLETE_EN.md",
+    "VESTIGIUM_EDA_REPORT_EN.html",
+    "VESTIGIUM_EDA_EN.ipynb",
+    "render_eda.py",
+    "build_english_report.py",
+    "README.md"
+  ],
+  "note": "English edition preserves original tables and raw input SHA256; figures and documentation were translated without recomputing source aggregates."
+}
