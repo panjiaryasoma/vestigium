@@ -30,11 +30,11 @@ See [EDA](../docs/eda/EDA_REPORT.md), [data contract](../docs/data-engineering/D
 
 1. Obtain NASA FIRMS CSV files for Indonesia from the official archive; comply with the source attribution and access terms.
 2. Place the source archive at `data/raw/data.zip`.
-3. Create `data/processed/` locally and run from the repository root:
+3. Run `uv sync --locked`, create `data/processed/` locally, and execute from the repository root:
 
 ```bash
 mkdir -p data/processed
-python src/pipelines/build_vestigium_daily_baseline.py data/raw/data.zip data/processed/daily_sensor_baseline.csv
+uv run python src/pipelines/build_vestigium_daily_baseline.py data/raw/data.zip data/processed/daily_sensor_baseline.csv
 ```
 
 This script produces **unharmonized** detection counts per UTC date and sensor family. It is not the complete geospatial/harmonization pipeline; see the notebooks and methodological reports for the other stages.
