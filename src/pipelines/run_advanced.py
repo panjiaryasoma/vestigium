@@ -127,8 +127,7 @@ def aggregate(database: Path, output: Path):
     (output/"geospatial_quality_report.json").write_text(json.dumps(result,indent=2),encoding="utf8")
     src.close()
     tmp.close()
-    # Do not delete _spatial_work.sqlite automatically; retain for audit, then
-    # remove explicitly after validating output and available disk space.
+    tmp_path.unlink(missing_ok=True)  # Remove disposable multi-GB intermediate after QA.
     print(json.dumps(result,indent=2))
     return result
 
