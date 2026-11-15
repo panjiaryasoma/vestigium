@@ -54,7 +54,7 @@ def aggregate(database: Path, output: Path):
         frp_mw REAL, day INTEGER,night INTEGER)""")
     forward = Transformer.from_crs("EPSG:4326", "EPSG:6933", always_xy=True)
     reverse = Transformer.from_crs("EPSG:6933", "EPSG:4326", always_xy=True)
-    cursor = src.execute("SELECT sensor,year,month,longitude,latitude,frp_mw,time_utc FROM hotspots ORDER BY id")
+    cursor = src.execute("SELECT sensor,year,month,longitude,latitude,frp_mw,daynight FROM hotspots ORDER BY id")
     count = 0
     while True:
         batch = cursor.fetchmany(20_000)
@@ -71,10 +71,8 @@ def aggregate(database: Path, output: Path):
             x05,y05=geo(0.5)
             x025,y025=geo(0.25)
             x01,y01=geo(0.1)
-            # FIRMS day/night field must be retained from the original CSV for
-            # day/night counts; this build uses NULL for unavailable metadata.
             rows.append((r[0],r[1],r[2],math.floor(ex[i]/CELL_M),math.floor(ey[i]/CELL_M),
-                         x1,y1,x05,y05,x025,y025,x01,y01,r[5],None,None))
+                         x1,y1,x05,y05,x025,y025,x01,y01,r[5],int(r[6]=='D'),int(r[6]=='N')))
         tmp.executemany("INSERT INTO grid_records VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",rows)
         count+=len(rows)
         if count % 200_000 == 0:
@@ -86,7 +84,8 @@ def aggregate(database: Path, output: Path):
     # Grid-month records are sensor-specific. Source detections are never
     # deduplicated across satellite overpasses.
     sql = """SELECT year,month,sensor,cell_x,cell_y,
-                 COUNT(*) AS detection_count, ROUND(SUM(frp_mw),5) AS frp_sum_mw
+                 COUNT(*) AS detection_count, ROUND(SUM(frp_mw),5) AS frp_sum_mw,
+                 SUM(day) AS daytime_detections, SUM(night) AS nighttime_detections
              FROM grid_records
              GROUP BY year,month,sensor,cell_x,cell_y
              ORDER BY year,month,sensor,cell_x,cell_y"""
@@ -98,18 +97,17 @@ def aggregate(database: Path, output: Path):
         w.writerow(["year","month","sensor","cell_x","cell_y","detection_count",
                     "frp_sum_mw","daytime_detections","nighttime_detections",
                     "center_longitude","center_latitude"])
-        for year,month,sensor,cx,cy,n,frp in tmp.execute(sql):
+        for year,month,sensor,cx,cy,n,frp,dn,nn in tmp.execute(sql):
             center_x=(cx+0.5)*CELL_M
             center_y=(cy+0.5)*CELL_M
             lon,lat=reverse.transform(center_x,center_y)
-            w.writerow([year,month,sensor,cx,cy,n,frp,"","",round(lon,6),round(lat,6)])
+            w.writerow([year,month,sensor,cx,cy,n,frp,dn,nn,round(lon,6),round(lat,6)])
             grouped+=1
             conserved+=n
     assert conserved==expected
     result={"input_sqlite":str(database),"accepted_type0":expected,
             "equal_area_crs":"EPSG:6933","cell_size_meters":CELL_M,
             "equal_area_rows":grouped,"all_detectors_reconciled":True,
-            "metadata_warning":"Day/night is unknown in this regenerated geospatial output: original SQLite does not store daynight.",
             "pixel_caveat":"Pixel-center aggregation, not wildfire incidents or burned-area estimates"}
     for res,colx,coly in [(1.0,"x1","y1"),(0.5,"x05","y05"),
                            (0.25,"x025","y025"),(0.1,"x01","y01")]:
