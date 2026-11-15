@@ -88,6 +88,7 @@ def aggregate(database: Path, output: Path):
     # deduplicated across satellite overpasses.
     sql = """SELECT year,month,sensor,cell_x,cell_y,
                  COUNT(*) AS detection_count, ROUND(SUM(frp_mw),5) AS frp_sum_mw,
+                 ROUND(MAX(frp_mw),5) AS max_frp_mw,
                  SUM(day) AS daytime_detections, SUM(night) AS nighttime_detections
              FROM grid_records
              GROUP BY year,month,sensor,cell_x,cell_y
@@ -98,13 +99,13 @@ def aggregate(database: Path, output: Path):
     with path.open("w",newline="",encoding="utf8") as f:
         w=csv.writer(f)
         w.writerow(["year","month","sensor","cell_x","cell_y","detection_count",
-                    "frp_sum_mw","daytime_detections","nighttime_detections",
+                    "frp_sum_mw","max_frp_mw","daytime_detections","nighttime_detections",
                     "center_longitude","center_latitude"])
-        for year,month,sensor,cx,cy,n,frp,dn,nn in tmp.execute(sql):
+        for year,month,sensor,cx,cy,n,frp,max_frp,dn,nn in tmp.execute(sql):
             center_x=(cx+0.5)*CELL_M
             center_y=(cy+0.5)*CELL_M
             lon,lat=reverse.transform(center_x,center_y)
-            w.writerow([year,month,sensor,cx,cy,n,frp,dn,nn,round(lon,6),round(lat,6)])
+            w.writerow([year,month,sensor,cx,cy,n,frp,max_frp,dn,nn,round(lon,6),round(lat,6)])
             grouped+=1
             conserved+=n
     assert conserved==expected
