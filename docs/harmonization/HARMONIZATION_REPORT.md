@@ -1,5 +1,7 @@
 # VESTIGIUM | MODIS–VIIRS S-NPP Harmonization: Experimental Baseline
 
+> **Repository evidence note:** The metrics below originate from the original 15 November 2026 experiment. The compact SVGs linked here reproduce the report's quoted summary metrics; they are not new results from the reconstructed GitHub model. See the [Model Card](model/MODEL_CARD.md) and [JSON evidence snapshot](evidence/archived_metrics_2026-11-15.json).
+
 **Study area:** Indonesia (coarse source-region bounding box, not a verified national polygon clip)  
 **Coverage:** 2000–2025 source detections; calibration overlap 2013–2025  
 **Data source:** NASA FIRMS active fire / thermal anomaly products, `type = 0` presumed vegetation fire  
@@ -52,7 +54,7 @@ Year is not an ML feature; thus the model cannot directly memorize a calendar-ye
 
 The selected model reduced validation RMSE, but exhibited **+34.9% aggregate count bias**. Choosing a model based on validation does not establish that the predicted values are unbiased or physically calibrated.
 
-![2022 model validation RMSE](outputs/figures/02_validation_rmse.png)
+![Archived 2022 validation RMSE](figures/validation_rmse.svg)
 
 ## 5. Untouched temporal test (years 2023–2025)
 
@@ -65,8 +67,9 @@ The selected model reduced validation RMSE, but exhibited **+34.9% aggregate cou
 
 Test metrics are computed **only in MODIS-positive cell-months**. They must not be compared directly with full-national S-NPP totals. The test-target aggregate in this subset is **340,004** S-NPP pixel detections. The chosen ML model produces **378,269** equivalent pixel-count proxy units (a fractional *expected count*, not new simulated points).
 
-![Temporal holdout](outputs/figures/03_temporal_holdout_2023_2025.png)
-![Annual test totals](outputs/figures/07_holdout_annual_totals.png)
+![Archived temporal holdout MAE](figures/holdout_mae.svg)
+![Archived temporal holdout RMSE](figures/holdout_rmse.svg)
+![Archived total detected-pixel reference versus model estimate](figures/test_volume.svg)
 
 ### Regional failure modes (untouched test)
 
@@ -79,13 +82,13 @@ Test metrics are computed **only in MODIS-positive cell-months**. They must not 
 
 These *rough longitude bands* are diagnostic and **not** verified Indonesian administrative provinces. Regional calibration varies; no one scaling factor is accurate across every region.
 
-![Regional model bias](outputs/figures/04_regional_bias.png)
+![Archived regional model bias](figures/regional_bias.svg)
 
 ## 6. Coverage mismatch and unseen detections
 
 The reference sensor frequently reports a detected pixel in a grid/month where MODIS reports none. MODIS-only backcasting cannot reconstruct this pattern without external observations and a separate model for missing detections. This study explicitly preserves the unmatched S-NPP count in `overlap_coverage_diagnostics.csv`.
 
-![VIIRS-only coverage](outputs/figures/05_modis_blind_spot_diagnostic.png)
+![Archived VIIRS detections without MODIS co-presence](figures/viirs_detection_gap.svg)
 
 ## 7. Historical calendar product
 
@@ -93,7 +96,7 @@ The reference sensor frequently reports a detected pixel in a grid/month where M
 
 **Additional optional display:** `calendar_display_estimate` uses modeled MODIS in 2000–2011, VIIRS S-NPP reported detections from 2012 onward. **This line has a structural measurement break at 2012**. Do not present its jump as a real change in burning. 2000 includes only November–December. S-NPP started in January 2012 (its first January is incomplete), and NOAA-20 is available in this archive from 2018.
 
-![Monthly harmonized MODIS proxy](outputs/figures/06_harmonized_monthly_heatmap.png)
+*The original monthly heatmap remains in the archived research package; its underlying monthly output must be regenerated from the full dataset. The compact GitHub repository retains the source pipeline and the auditable summary figures rather than claiming the original raster image was re-rendered.*
 
 **No reliable uncertainty interval is provided for historical backcasts.** The `out_of_training_range` flag only notes extreme high-tail MODIS count/FRP values versus training; it does not prove in-domain predictions are accurate.
 
