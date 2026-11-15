@@ -19,6 +19,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src" / "pipelines"
 from build_pipeline import build
 from run_advanced import aggregate
 from harmonize import run
+from validate_outputs import validate
 
 HEADERS = ["latitude","longitude","acq_date","acq_time","frp",
            "confidence","type","satellite","daynight"]
@@ -48,23 +49,24 @@ class IntegrationTests(unittest.TestCase):
                             rows.append(dict(base,type="2"))
                         z.writestr(f"{sensor}/{sensor.lower()}_{y}_Indonesia.csv",
                                    csv_bytes(rows))
-            de=root/"engineered"
+            de=root/"data"/"processed"/"data-engineering"
             build(source,de)
             qa=json.loads((de/"quality_report.json").read_text())
             self.assertEqual(qa["source_files"],26)
             self.assertEqual(qa["accepted_presumed_vegetation_detections"],26)
             self.assertEqual(qa["excluded_non_vegetation_detections"],13)
-            geo=root/"geo"
+            geo=root/"data"/"processed"/"geospatial"
             spatial=aggregate(de/"vestigium_hotspots.sqlite",geo)
             self.assertEqual(spatial["accepted_type0"],26)
             self.assertTrue(spatial["all_detectors_reconciled"])
-            harm=root/"harm"
+            harm=root/"data"/"processed"/"harmonization"
             evaluation=run(geo/"monthly_equal_area_25km.csv",harm)
             self.assertIn(evaluation["preferred_method"],
                           ("global_ratio","seasonal_ratio","ml_poisson_hgbr"))
             self.assertTrue((harm/"harmonized_calendar_monthly.csv").exists())
             self.assertTrue((harm/"harmonized_calendar_annual.csv").exists())
             self.assertTrue((harm/"evaluation.json").exists())
+            self.assertEqual(validate(root)["source_pixels"], 26)
 
 if __name__=="__main__":
     unittest.main()
