@@ -26,7 +26,7 @@ sensor TEXT NOT NULL, satellite TEXT,
 date_utc TEXT NOT NULL, time_utc TEXT, timestamp_utc TEXT,
 year INTEGER NOT NULL, month INTEGER NOT NULL,
 latitude REAL NOT NULL, longitude REAL NOT NULL,
-frp_mw REAL NOT NULL, confidence_modis_pct REAL,
+frp_mw REAL NOT NULL, daynight TEXT, confidence_modis_pct REAL,
 confidence_viirs_label TEXT,
 grid_x INTEGER NOT NULL, grid_y INTEGER NOT NULL
 """
@@ -85,6 +85,7 @@ def normalize(row: dict, sensor: str):
             raise ValueError("Invalid VIIRS confidence class")
     return (sensor, row.get("satellite", ""), observed.isoformat(),
             time, dt, observed.year, observed.month, lat, lon, frp,
+            row.get("daynight", "").strip().upper() or None,
             modis_conf, viirs_conf,
             math.floor((lon + 180) / 0.25), math.floor((lat + 90) / 0.25))
 
@@ -117,8 +118,8 @@ def build(input_zip: Path, output: Path):
         first_date_utc TEXT, last_date_utc TEXT)""")
     sql = """INSERT INTO hotspots (
         sensor,satellite,date_utc,time_utc,timestamp_utc,year,month,
-        latitude,longitude,frp_mw,confidence_modis_pct,confidence_viirs_label,
-        grid_x,grid_y) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)"""
+        latitude,longitude,frp_mw,daynight,confidence_modis_pct,confidence_viirs_label,
+        grid_x,grid_y) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"""
     accepted = excluded = invalid = source_count = 0
     by_sensor: dict[str,int] = {}
     with zipfile.ZipFile(input_zip) as z:
