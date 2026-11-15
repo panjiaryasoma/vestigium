@@ -21,8 +21,9 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 EXPECTED = {"MODIS": 1443591, "VIIRS_SNPP": 3350961, "VIIRS_NOAA20": 1203124}
 KEY = ["year", "month", "cell_x", "cell_y"]
-FEATURES = ["log_modis_count", "log_modis_frp", "month_sin", "month_cos",
-            "center_longitude", "center_latitude", "modis_day", "modis_night"]
+FEATURES = ["log_modis_count", "log_modis_frp", "log_modis_max_frp",
+            "day_fraction", "month_sin", "month_cos",
+            "center_longitude", "center_latitude"]
 
 def read_input(path):
     d = pd.read_csv(path)
@@ -41,8 +42,11 @@ def make_training_frame(d):
     m = d.loc[d.sensor.eq("MODIS")].copy()
     m = m.rename(columns={"detection_count": "modis_count",
                            "frp_sum_mw": "modis_sum_frp_mw",
+                           "max_frp_mw": "modis_max_frp_mw",
                            "daytime_detections": "modis_day",
                            "nighttime_detections": "modis_night"})
+    if "modis_max_frp_mw" not in m.columns:
+        m["modis_max_frp_mw"] = m["modis_sum_frp_mw"]
     for col in ("modis_day", "modis_night"):
         if col not in m.columns:
             m[col] = 0.
@@ -55,6 +59,8 @@ def make_training_frame(d):
     base.loc[base.year.ge(2012), "snpp_count"] = base.loc[base.year.ge(2012), "snpp_count"].fillna(0.)
     base["log_modis_count"] = np.log1p(base.modis_count)
     base["log_modis_frp"] = np.log1p(base.modis_sum_frp_mw)
+    base["log_modis_max_frp"] = np.log1p(base.modis_max_frp_mw)
+    base["day_fraction"] = base.modis_day / np.maximum(1,base.modis_day + base.modis_night)
     base["month_sin"] = np.sin(2*np.pi*base.month/12)
     base["month_cos"] = np.cos(2*np.pi*base.month/12)
     return base, snpp
@@ -73,7 +79,7 @@ def calc_scales(train):
     seasonal = {}
     for m in range(1,13):
         a = train.loc[train.month.eq(m)]
-        seasonal[m] = float(a.snpp_count.sum()/a.modis_count.sum()) if a.modis_count.sum() else global_ratio
+        seasonal[m] = float((a.snpp_count.sum() + 1000*global_ratio) / (a.modis_count.sum() + 1000))
     return global_ratio,seasonal
 
 def predict_baselines(frame,global_ratio,seasonal_ratios):
@@ -82,8 +88,9 @@ def predict_baselines(frame,global_ratio,seasonal_ratios):
     return {"raw_modis":raw, "global_ratio":raw*global_ratio, "seasonal_ratio":raw*scale}
 
 def fit_ml(train):
-    model = HistGradientBoostingRegressor(loss="poisson",max_iter=180,
-        max_leaf_nodes=31,learning_rate=0.07,l2_regularization=1.0,random_state=42)
+    model = HistGradientBoostingRegressor(loss="poisson",max_iter=140,
+        max_leaf_nodes=18,max_depth=5,min_samples_leaf=90,
+        learning_rate=0.055,l2_regularization=8.0,random_state=42)
     model.fit(train[FEATURES].to_numpy(dtype="float64"),
               train.snpp_count.to_numpy(dtype="float64"))
     return model
@@ -230,6 +237,9 @@ def run(input_csv: Path, output: Path):
         "validation":validation,"test":testing,"source_by_sensor":sums,
         "training_rows":len(train),"validation_rows":len(val),"test_rows":len(test),
         "training_extrapolation_high_tail_quantile":.995,
+        "model_hyperparameters":model.get_params(),
+        "feature_names":FEATURES,
+        "model_lineage":"Reconstructed repository-native pipeline; historical report is not a verified rerun",
         "caveats":["No unique events or burned area estimated",
            "No overpass/clear-sky denominators",
            "Reference available only for MODIS-positive grid-months",
@@ -237,7 +247,7 @@ def run(input_csv: Path, output: Path):
            "Sensor sensitivity and regional/temporal bias remain",
            "Model uncertainty intervals not calibrated"]
     }
-    (output/"evaluation.json").write_text(json.dumps(evidence,indent=2),encoding="utf8")
+    (output/"evaluation.json").write_text(json.dumps(evidence,indent=2,default=str),encoding="utf8")
     try:
         import joblib
         joblib.dump(model,output/"poisson_model.joblib")
