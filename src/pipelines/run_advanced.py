@@ -43,7 +43,10 @@ def aggregate(database: Path, output: Path):
         raise FileNotFoundError(database)
     output.mkdir(parents=True, exist_ok=True)
     src = sqlite3.connect(f"file:{database.resolve()}?mode=ro", uri=True)
-    tmp = sqlite3.connect(output / "_spatial_work.sqlite")
+    tmp_path = output / "_spatial_work.sqlite"
+    if tmp_path.exists():
+        tmp_path.unlink()
+    tmp = sqlite3.connect(tmp_path)
     tmp.execute("PRAGMA journal_mode=OFF")
     tmp.execute("PRAGMA synchronous=OFF")
     tmp.execute("""CREATE TABLE grid_records(
